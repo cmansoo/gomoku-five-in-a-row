@@ -27,7 +27,7 @@ SCREENSIZE = (S_WIDTH, S_HEIGHT)
 RADIUS = 20
 
 
-class Omok:
+class Gomoku:
     def __init__(self, rows: int, cols: int):
         self.row_count = rows
         self.col_count = cols
@@ -192,7 +192,7 @@ class Omok:
 def main():
     pygame.init()
     pygame.display.set_caption('Gomoku')
-    Omok(ROW_COUNT, COL_COUNT).play()
+    Gomoku(ROW_COUNT, COL_COUNT).play()
 
 
 if __name__ == '__main__':
