@@ -64,7 +64,7 @@ class Gomoku:
 
     def clear_board(self):
         for y, x in np.argwhere(self.board):
-            self.board[x][y] = EMPTY
+            self.board[y][x] = EMPTY
         self.draw_board()
 
     def drop_piece(self, row: int, col: int, piece: int):
