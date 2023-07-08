@@ -4,27 +4,28 @@ import pygame
 import sys
 import button as b
 
-# colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-BROWN = (205, 128, 0)
 
-# board size
-ROW_COUNT = 15
-COL_COUNT = 15
+class Color:
+    BLACK = 0, 0, 0
+    WHITE = 255, 255, 255
+    BROWN = 205, 128, 0
 
-# game variables
-EMPTY = 0
-BLACK_PIECE = 1
-WHITE_PIECE = 2
-DUMMY = 3
 
-# screen size
-BLOCKSIZE = 50
-S_WIDTH = COL_COUNT * BLOCKSIZE
-S_HEIGHT = ROW_COUNT * BLOCKSIZE
-SCREENSIZE = (S_WIDTH, S_HEIGHT)
-RADIUS = 20
+class GameVars:
+    EMPTY = 0
+    BLACK_PIECE = 1
+    WHITE_PIECE = 2
+    DUMMY = 3
+
+
+class Size:
+    ROW_COUNT = 15
+    COL_COUNT = 15
+    BLOCKSIZE = 50
+    S_WIDTH = COL_COUNT * BLOCKSIZE
+    S_HEIGHT = ROW_COUNT * BLOCKSIZE
+    SCREENSIZE = (S_WIDTH, S_HEIGHT)
+    RADIUS = 20
 
 
 class Gomoku:
@@ -32,39 +33,39 @@ class Gomoku:
         self.row_count = rows
         self.col_count = cols
         self.board = np.zeros((self.row_count, self.col_count)).astype(int)
-        self.screen = pygame.display.set_mode(SCREENSIZE)
+        self.screen = pygame.display.set_mode(Size.SCREENSIZE)
         self.players = ['Black', 'White']
-        self.turn = BLACK_PIECE
+        self.turn = GameVars.BLACK_PIECE
         self.font = pygame.font.Font('freesansbold.ttf', 32)
 
     def draw_board(self):
         # fill board with rectangles
-        for x in range(0, S_WIDTH, BLOCKSIZE):
-            for y in range(0, S_HEIGHT, BLOCKSIZE):
-                rect = (x, y, BLOCKSIZE, BLOCKSIZE)
-                pygame.draw.rect(self.screen, BROWN, rect)
+        for x in range(0, Size.S_WIDTH, Size.BLOCKSIZE):
+            for y in range(0, Size.S_HEIGHT, Size.BLOCKSIZE):
+                rect = (x, y, Size.BLOCKSIZE, Size.BLOCKSIZE)
+                pygame.draw.rect(self.screen, Color.BROWN, rect)
 
         # draw vertical grid lines
-        for x in range(BLOCKSIZE // 2, S_WIDTH - BLOCKSIZE // 2 + BLOCKSIZE, BLOCKSIZE):
+        for x in range(Size.BLOCKSIZE // 2, Size.S_WIDTH - Size.BLOCKSIZE // 2 + Size.BLOCKSIZE, Size.BLOCKSIZE):
             pygame.draw.line(
-                self.screen, BLACK,
-                start_pos=(x, BLOCKSIZE // 2),
-                end_pos=(x, S_WIDTH - BLOCKSIZE // 2),
+                self.screen, Color.BLACK,
+                start_pos=(x, Size.BLOCKSIZE // 2),
+                end_pos=(x, Size.S_WIDTH - Size.BLOCKSIZE // 2),
                 width=2
             )
 
         # draw horizontal grid lines
-        for y in range(BLOCKSIZE // 2, S_HEIGHT - BLOCKSIZE // 2 + BLOCKSIZE, BLOCKSIZE):
+        for y in range(Size.BLOCKSIZE // 2, Size.S_HEIGHT - Size.BLOCKSIZE // 2 + Size.BLOCKSIZE, Size.BLOCKSIZE):
             pygame.draw.line(
-                self.screen, BLACK,
-                start_pos=(BLOCKSIZE // 2, y),
-                end_pos=(S_HEIGHT - BLOCKSIZE // 2, y),
+                self.screen, Color.BLACK,
+                start_pos=(Size.BLOCKSIZE // 2, y),
+                end_pos=(Size.S_HEIGHT - Size.BLOCKSIZE // 2, y),
                 width=2
             )
 
     def clear_board(self):
         for y, x in np.argwhere(self.board):
-            self.board[y][x] = EMPTY
+            self.board[x][y] = GameVars.EMPTY
         self.draw_board()
 
     def drop_piece(self, row: int, col: int, piece: int):
@@ -72,25 +73,25 @@ class Gomoku:
 
     def draw_piece(self):
         for y, x in np.argwhere(self.board):
-            if self.board[y][x] == BLACK_PIECE:
+            if self.board[y][x] == GameVars.BLACK_PIECE:
                 pygame.draw.circle(
-                    self.screen, BLACK,
-                    center=(x * BLOCKSIZE + BLOCKSIZE // 2, y * BLOCKSIZE + BLOCKSIZE // 2),
-                    radius=RADIUS
+                    self.screen, Color.BLACK,
+                    center=(x * Size.BLOCKSIZE + Size.BLOCKSIZE // 2, y * Size.BLOCKSIZE + Size.BLOCKSIZE // 2),
+                    radius=Size.RADIUS
                 )
 
-            elif self.board[y][x] == WHITE_PIECE:
+            elif self.board[y][x] == GameVars.WHITE_PIECE:
                 pygame.draw.circle(
-                    self.screen, WHITE,
-                    center=(x * BLOCKSIZE + BLOCKSIZE // 2, y * BLOCKSIZE + BLOCKSIZE // 2),
-                    radius=RADIUS
+                    self.screen, Color.WHITE,
+                    center=(x * Size.BLOCKSIZE + Size.BLOCKSIZE // 2, y * Size.BLOCKSIZE + Size.BLOCKSIZE // 2),
+                    radius=Size.RADIUS
                 )
 
     def is_valid_loc(self, row: int, col: int) -> bool:
-        return self.board[row][col] == EMPTY
+        return self.board[row][col] == GameVars.EMPTY
 
     def make_invalid(self):
-        self.board = np.where(self.board == EMPTY, DUMMY, DUMMY)
+        self.board = np.where(self.board == GameVars.EMPTY, GameVars.DUMMY, GameVars.DUMMY)
 
     def horizontal_win(self, piece) -> bool:
         for c in range(self.col_count - 4):
@@ -137,15 +138,15 @@ class Gomoku:
         )
 
     def end_banner(self, player):
-        label = self.font.render(f'{player} wins!', True, WHITE, BLACK)
+        label = self.font.render(f'{player} wins!', True, Color.WHITE, Color.BLACK)
         self.screen.blit(label, (280, 50))
 
     def restart(self, x, y):
-        label = self.font.render('New game', True, WHITE, BLACK)
+        label = self.font.render('New game', True, Color.WHITE, Color.BLACK)
         return b.Button(x, y, label)
 
     def _exit(self, x, y):
-        label = self.font.render('Exit', True, WHITE, BLACK)
+        label = self.font.render('Exit', True, Color.WHITE, Color.BLACK)
         return b.Button(x, y, label)
 
     def play(self):
@@ -162,25 +163,25 @@ class Gomoku:
                     sys.exit()
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    col = math.floor(x_pos / BLOCKSIZE)
-                    row = math.floor(y_pos / BLOCKSIZE)
+                    col = math.floor(x_pos / Size.BLOCKSIZE)
+                    row = math.floor(y_pos / Size.BLOCKSIZE)
 
                     if self.is_valid_loc(row, col):
                         self.drop_piece(row, col, self.turn)
                         self.draw_piece()
 
                         if self.is_won(self.turn):
-                            name = self.players[0] if self.turn == BLACK_PIECE else self.players[1]
+                            name = self.players[0] if self.turn == GameVars.BLACK_PIECE else self.players[1]
                             self.end_banner(name)
                             self.make_invalid()
                             restart_button.draw(self.screen)
                             exit_button.draw(self.screen)
-
+                        # print(self.board)
                         self.turn = 3 - self.turn
 
             if restart_button.is_clicked():
                 self.clear_board()
-                self.turn = BLACK_PIECE
+                self.turn = GameVars.BLACK_PIECE
 
             elif exit_button.is_clicked():
                 pygame.quit()
@@ -192,8 +193,9 @@ class Gomoku:
 def main():
     pygame.init()
     pygame.display.set_caption('Gomoku')
-    Gomoku(ROW_COUNT, COL_COUNT).play()
 
 
 if __name__ == '__main__':
     main()
+    game = Gomoku(Size.ROW_COUNT, Size.COL_COUNT)
+    game.play()
