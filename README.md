@@ -2,6 +2,9 @@
 
 Inspired by this [tutorial](https://www.youtube.com/watch?v=UYgyRArKDEs&list=PLFCB5Dp81iNV_inzM-R9AKkZZlePCZdtV&ab_channel=KeithGalli)
 
+### Gameplay screenshots
+![image](https://github.com/cmansoo/gomoku-five-in-a-row/assets/70994968/23bc8c42-0c86-4e91-9978-a602a7f86286)
+
 ## How to play
 
 Run gomoku.py.
